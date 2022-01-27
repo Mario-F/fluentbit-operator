@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"reflect"
 	"sort"
 
@@ -106,6 +107,7 @@ func (list FilterList) Load(sl plugins.SecretLoader) (string, error) {
 			if p == nil || reflect.ValueOf(p).IsNil() {
 				return nil
 			}
+			log.Printf("Merge plugin: %v+", p)
 
 			buf.WriteString("[Filter]\n")
 			buf.WriteString(fmt.Sprintf("    Name    %s\n", p.Name()))
@@ -119,6 +121,8 @@ func (list FilterList) Load(sl plugins.SecretLoader) (string, error) {
 			if err != nil {
 				return err
 			}
+			log.Printf("Merge kvs: %v+", kvs)
+			log.Printf("Merge string: %v+", kvs.String())
 			buf.WriteString(kvs.String())
 			return nil
 		}
@@ -126,6 +130,7 @@ func (list FilterList) Load(sl plugins.SecretLoader) (string, error) {
 		for _, elem := range item.Spec.FilterItems {
 			for i := 0; i < reflect.ValueOf(elem).NumField(); i++ {
 				p, _ := reflect.ValueOf(elem).Field(i).Interface().(plugins.Plugin)
+				log.Printf("Process plugin: %v+", p)
 				if err := merge(p); err != nil {
 					return "", err
 				}
