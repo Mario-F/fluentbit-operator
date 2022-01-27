@@ -60,8 +60,6 @@ type FluentBitReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *FluentBitReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = r.Log.WithValues("fluent-bit", req.NamespacedName)
-
 	var fb logging.FluentBit
 	if err := r.Get(ctx, req.NamespacedName, &fb); err != nil {
 		if errors.IsNotFound(err) {

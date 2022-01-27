@@ -55,10 +55,8 @@ type FluentBitConfigReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *FluentBitConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = r.Log.WithValues("fluentbitconfig", req.NamespacedName)
-
 	var cfgs logging.FluentBitConfigList
-	if err := r.List(ctx, &cfgs, client.InNamespace(req.Namespace)); err != nil {
+	if err := r.List(ctx, &cfgs); err != nil {
 		if errors.IsNotFound(err) {
 			return ctrl.Result{}, nil
 		}
@@ -72,7 +70,7 @@ func (r *FluentBitConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if err != nil {
 			return ctrl.Result{}, err
 		}
-		if err = r.List(ctx, &inputs, client.InNamespace(req.Namespace), client.MatchingLabelsSelector{Selector: selector}); err != nil {
+		if err = r.List(ctx, &inputs, client.MatchingLabelsSelector{Selector: selector}); err != nil {
 			return ctrl.Result{}, err
 		}
 
@@ -82,7 +80,7 @@ func (r *FluentBitConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if err != nil {
 			return ctrl.Result{}, err
 		}
-		if err = r.List(ctx, &filters, client.InNamespace(req.Namespace), client.MatchingLabelsSelector{Selector: selector}); err != nil {
+		if err = r.List(ctx, &filters, client.MatchingLabelsSelector{Selector: selector}); err != nil {
 			return ctrl.Result{}, err
 		}
 
@@ -92,7 +90,7 @@ func (r *FluentBitConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if err != nil {
 			return ctrl.Result{}, err
 		}
-		if err = r.List(ctx, &outputs, client.InNamespace(req.Namespace), client.MatchingLabelsSelector{Selector: selector}); err != nil {
+		if err = r.List(ctx, &outputs, client.MatchingLabelsSelector{Selector: selector}); err != nil {
 			return ctrl.Result{}, err
 		}
 
@@ -102,7 +100,7 @@ func (r *FluentBitConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if err != nil {
 			return ctrl.Result{}, err
 		}
-		if err = r.List(ctx, &parsers, client.InNamespace(req.Namespace), client.MatchingLabelsSelector{Selector: selector}); err != nil {
+		if err = r.List(ctx, &parsers, client.MatchingLabelsSelector{Selector: selector}); err != nil {
 			return ctrl.Result{}, err
 		}
 
